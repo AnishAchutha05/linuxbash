@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux & Bash Mastery Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #0f1318;
+    --bg3: #141920;
+    --surface: #181e27;
+    --surface2: #1e2633;
+    --border: #1f2d3d;
+    --border2: #2a3d52;
+    --green: #00e5a0;
+    --green-dim: #00b87a;
+    --green-glow: rgba(0,229,160,0.12);
+    --green-glow2: rgba(0,229,160,0.06);
+    --amber: #f5a623;
+    --amber-dim: #c47d0e;
+    --red: #ff5f5f;
+    --red-dim: #c43030;
+    --text: #e2e8f0;
+    --text2: #8fa3bc;
+    --text3: #4d6178;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 8px;
+    --radius-sm: 4px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.04) 2px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  .wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 3.5rem 2.5rem 2.5rem;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,229,160,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: 'Linux & Bash';
+    position: absolute;
+    right: 2rem; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--mono);
+    font-size: 7rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.02);
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green), 0 0 16px rgba(0,229,160,0.4);
+    animation: blink 2.2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 1; box-shadow: 0 0 8px var(--green), 0 0 16px rgba(0,229,160,0.4); }
+    40% { opacity: 0.2; box-shadow: none; }
+  }
+
+  .hero h1 {
+    font-family: var(--sans);
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    font-family: var(--mono);
+    color: var(--green);
+    font-size: 0.9em;
+    text-shadow: 0 0 24px rgba(0,229,160,0.4);
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    color: var(--text2);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 5px 12px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text2);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .chip strong {
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-track {
+    height: 1px;
+    background: var(--border);
+    position: relative;
+    overflow: visible;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-dim), var(--green));
+    transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px var(--green);
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -1px; top: -3px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .tabs-bar::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    color: var(--text3);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .tab-btn:hover { color: var(--text2); }
+
+  .tab-btn.active {
+    color: var(--green);
+    border-bottom-color: var(--green);
+  }
+
+  .tab-btn.active::before {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 1px;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+  }
+
+  /* ── PHASE PANELS ── */
+  .phase-panel { display: none; }
+  .phase-panel.active { display: block; }
+
+  .phase-header {
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--bg2) 0%, var(--bg) 100%);
+  }
+
+  .phase-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+  }
+
+  .phase-desc {
+    font-size: 0.85rem;
+    color: var(--text2);
+    font-weight: 300;
+    max-width: 460px;
+    line-height: 1.65;
+  }
+
+  .level-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .level-beginner {
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.3);
+    color: var(--green);
+  }
+
+  .level-intermediate {
+    background: rgba(245,166,35,0.08);
+    border: 1px solid rgba(245,166,35,0.3);
+    color: var(--amber);
+  }
+
+  .level-advanced {
+    background: rgba(255,95,95,0.08);
+    border: 1px solid rgba(255,95,95,0.3);
+    color: var(--red);
+  }
+
+  /* ── SKILL GRID ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+    padding: 1.5rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+
+  .skill-card:hover {
+    border-color: var(--border2);
+    background: var(--surface2);
+  }
+
+  .skill-card.expanded {
+    border-color: var(--green-dim);
+    background: var(--surface2);
+    box-shadow: 0 0 0 1px rgba(0,229,160,0.1), inset 0 0 30px rgba(0,229,160,0.03);
+  }
+
+  .skill-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .skill-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    width: 30px; height: 30px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.2);
+    color: var(--green);
+  }
+
+  .skill-card.expanded .skill-num {
+    background: rgba(0,229,160,0.15);
+    border-color: rgba(0,229,160,0.4);
+    box-shadow: 0 0 8px rgba(0,229,160,0.2);
+  }
+
+  .skill-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    flex: 1;
+    color: var(--text);
+  }
+
+  .skill-chevron {
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text3);
+    font-size: 14px;
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .skill-card.expanded .skill-chevron {
+    transform: rotate(45deg);
+    color: var(--green);
+  }
+
+  .skill-body {
+    display: none;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .skill-card.expanded .skill-body { display: block; }
+
+  .topic-line {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    padding: 3px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    line-height: 1.6;
+  }
+
+  .topic-line::before {
+    content: '→';
+    color: var(--green);
+    flex-shrink: 0;
+    font-size: 10px;
+    margin-top: 1px;
+  }
+
+  /* ── TASKS ── */
+  .tasks-section {
+    padding: 1.5rem 2.5rem 2rem;
+  }
+
+  .tasks-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tasks-heading::before {
+    content: '';
+    display: inline-block;
+    width: 2px; height: 12px;
+    background: var(--green);
+    border-radius: 1px;
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  .task-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.2rem;
+    margin-bottom: 8px;
+    display: flex;
+    gap: 14px;
+    transition: border-color 0.15s;
+  }
+
+  .task-card:hover { border-color: var(--border2); }
+
+  .task-index {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text3);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .task-content {}
+
+  .task-name {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  .task-info {
+    font-size: 0.78rem;
+    color: var(--text2);
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 6px;
+  }
+
+  .task-cmd {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 9px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--green);
+    border-left: 2px solid var(--green-dim);
+  }
+
+  /* ── FOOTER NAV ── */
+  .roadmap-footer {
+    padding: 1.25rem 2.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-status {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+  }
+
+  .footer-status .hl { color: var(--green); }
+
+  .nav-controls { display: flex; gap: 8px; }
+
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 7px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .nav-btn:hover:not(:disabled) {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--text3);
+  }
+
+  .nav-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+  .nav-btn.primary {
+    background: var(--green);
+    color: #000;
+    border-color: var(--green);
+    box-shadow: 0 0 16px rgba(0,229,160,0.25);
+  }
+
+  .nav-btn.primary:hover:not(:disabled) {
+    background: #00ffb2;
+    box-shadow: 0 0 24px rgba(0,229,160,0.4);
+  }
+
+  /* ── ANIMATIONS ── */
+  .phase-panel.active .phase-header { animation: fadeUp 0.3s ease both; }
+  .phase-panel.active .skill-card { animation: fadeUp 0.35s ease both; }
+  .phase-panel.active .skill-card:nth-child(2) { animation-delay: 0.04s; }
+  .phase-panel.active .skill-card:nth-child(3) { animation-delay: 0.08s; }
+  .phase-panel.active .skill-card:nth-child(4) { animation-delay: 0.12s; }
+  .phase-panel.active .skill-card:nth-child(5) { animation-delay: 0.16s; }
+  .phase-panel.active .skill-card:nth-child(6) { animation-delay: 0.2s; }
+  .phase-panel.active .skill-card:nth-child(7) { animation-delay: 0.24s; }
+  .phase-panel.active .skill-card:nth-child(8) { animation-delay: 0.28s; }
+  .phase-panel.active .task-card { animation: fadeUp 0.35s ease both; }
+  .phase-panel.active .task-card:nth-child(2) { animation-delay: 0.06s; }
+  .phase-panel.active .task-card:nth-child(3) { animation-delay: 0.12s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">devops engineer's guide · cs student edition</div>
+    <h1>Linux &amp; <em>Bash</em><br>Mastery Roadmap</h1>
+    <p class="hero-sub">Everything you need to genuinely understand the Linux command line and bash scripting — built for your path toward GCP and Docker.</p>
+    <div class="hero-chips">
+      <span class="chip"><strong>6</strong>&nbsp; milestones</span>
+      <span class="chip"><strong>~10–14</strong>&nbsp; weeks</span>
+      <span class="chip"><strong>Ubuntu</strong> / any distro</span>
+      <span class="chip">basics → advanced</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- TABS -->
+  <nav class="tabs-bar" id="tabsBar">
+    <button class="tab-btn active" onclick="switchPhase(0)">01 · Foundation</button>
+    <button class="tab-btn" onclick="switchPhase(1)">02 · File System</button>
+    <button class="tab-btn" onclick="switchPhase(2)">03 · Process &amp; Perms</button>
+    <button class="tab-btn" onclick="switchPhase(3)">04 · Bash Scripting</button>
+    <button class="tab-btn" onclick="switchPhase(4)">05 · Power Tools</button>
+    <button class="tab-btn" onclick="switchPhase(5)">06 · Advanced &amp; DevOps</button>
+  </nav>
+
+  <!-- ═══════════ PHASE 0: FOUNDATION ═══════════ -->
+  <div class="phase-panel active" id="phase-0">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 01 / 06</div>
+        <div class="phase-title">Foundation</div>
+        <div class="phase-desc">Before you type a single command — understand what Linux actually is, how the terminal works, and why it matters for a DevOps engineer.</div>
+      </div>
+      <div class="level-badge level-beginner">beginner</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">What is Linux?</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Kernel vs OS vs distro — what's different</div>
+          <div class="topic-line">Linux vs Windows/macOS — why servers run Linux</div>
+          <div class="topic-line">Popular distros: Ubuntu, Debian, CentOS, Alpine</div>
+          <div class="topic-line">Why DevOps/Cloud engineers must know Linux</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">Terminal Basics</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">What is a shell? bash vs zsh vs sh</div>
+          <div class="topic-line">Opening a terminal: Ubuntu, macOS, WSL</div>
+          <div class="topic-line">The prompt: user@host:directory $</div>
+          <div class="topic-line">Running commands: command [options] [arguments]</div>
+          <div class="topic-line">stdin, stdout, stderr — the three streams</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">Navigation</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">pwd, ls, cd — your daily three</div>
+          <div class="topic-line">Absolute vs relative paths</div>
+          <div class="topic-line">Home directory (~), root (/), and . vs ..</div>
+          <div class="topic-line">ls flags: -l, -a, -lh, -lt (human readable + sorted)</div>
+          <div class="topic-line">Tab completion &amp; command history (↑ arrow, Ctrl+R)</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">Getting Help</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">man command — reading manual pages</div>
+          <div class="topic-line">command --help for quick reference</div>
+          <div class="topic-line">tldr pages — simpler man alternatives</div>
+          <div class="topic-line">whatis and apropos for discovery</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">Terminal Orientation</div>
+          <div class="task-info">Open a terminal. Run pwd, ls -la, cd /, ls, cd ~ and describe in a note what each output means. Map out the root filesystem mentally.</div>
+          <span class="task-cmd">pwd && ls -la && cd / && ls</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Read a Manual Page</div>
+          <div class="task-info">Run man ls. Navigate with arrow keys. Find the flag that sorts by file size. Exit with q. Then do the same for man cp.</div>
+          <span class="task-cmd">man ls</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">History &amp; Shortcuts</div>
+          <div class="task-info">Run 10 different commands. Use Ctrl+R to reverse-search for one of them. Use !! to re-run the last command. List your history with the history command.</div>
+          <span class="task-cmd">history | tail -20</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 1: FILE SYSTEM ═══════════ -->
+  <div class="phase-panel" id="phase-1">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 02 / 06</div>
+        <div class="phase-title">File System</div>
+        <div class="phase-desc">Linux is a file. Learn to create, move, read, and manipulate files and directories — this is 60% of your daily DevOps work.</div>
+      </div>
+      <div class="level-badge level-beginner">beginner</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">File Operations</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">touch, mkdir, mkdir -p for creating files/dirs</div>
+          <div class="topic-line">cp, mv, rm, rm -rf (use carefully!)</div>
+          <div class="topic-line">Renaming files with mv</div>
+          <div class="topic-line">Wildcards: *, ?, [abc] for bulk operations</div>
+          <div class="topic-line">rmdir vs rm -r for directories</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">Viewing File Content</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">cat, less, more — when to use each</div>
+          <div class="topic-line">head and tail — first/last N lines</div>
+          <div class="topic-line">tail -f for live log watching</div>
+          <div class="topic-line">wc for word/line/byte counts</div>
+          <div class="topic-line">file command to detect file type</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">Text Editing</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">nano — beginner-friendly editor</div>
+          <div class="topic-line">vim basics: insert mode (i), save (:wq), quit (:q!)</div>
+          <div class="topic-line">echo and > / >> for quick writes</div>
+          <div class="topic-line">heredoc syntax for multiline input</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">Linux Filesystem Hierarchy</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">/etc — config files (nginx, hosts, cron)</div>
+          <div class="topic-line">/var/log — where logs live</div>
+          <div class="topic-line">/home — user home directories</div>
+          <div class="topic-line">/bin, /usr/bin — executables</div>
+          <div class="topic-line">/tmp — temporary files (cleared on reboot)</div>
+          <div class="topic-line">/proc, /dev — virtual kernel filesystems</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">05</div><div class="skill-label">Links &amp; Symlinks</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Hard links vs symbolic links</div>
+          <div class="topic-line">ln -s to create symlinks</div>
+          <div class="topic-line">When symlinks break — dangling pointers</div>
+          <div class="topic-line">Real-world use: version-pinned binaries</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">06</div><div class="skill-label">Searching Files</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">find / -name "*.log" — find by name</div>
+          <div class="topic-line">find by type (-type f/d), size, mtime</div>
+          <div class="topic-line">locate for fast indexed search</div>
+          <div class="topic-line">which and whereis for finding binaries</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">Build a project folder structure</div>
+          <div class="task-info">Using only the terminal, create ~/projects/myapp with subdirs src/, logs/, config/. Create 3 placeholder .txt files inside src/ using touch. Move one to config/.</div>
+          <span class="task-cmd">mkdir -p ~/projects/myapp/{src,logs,config}</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Read a real log file</div>
+          <div class="task-info">Navigate to /var/log. Use tail -50 syslog (or auth.log). Then use tail -f on it — leave it open for 30 seconds and watch entries. Exit with Ctrl+C.</div>
+          <span class="task-cmd">tail -f /var/log/syslog</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">Find all .conf files on the system</div>
+          <div class="task-info">Use find to search /etc for all files ending in .conf. Pipe the output to wc -l to count them. Try adding -mtime -7 to find ones modified in the last week.</div>
+          <span class="task-cmd">find /etc -name "*.conf" | wc -l</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 2: PROCESS & PERMS ═══════════ -->
+  <div class="phase-panel" id="phase-2">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 03 / 06</div>
+        <div class="phase-title">Process &amp; Permissions</div>
+        <div class="phase-desc">Understand who can do what, and what's running on your machine. Core OS concepts every DevOps and cloud engineer uses daily.</div>
+      </div>
+      <div class="level-badge level-beginner">beginner → intermediate</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">File Permissions</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">rwx model — read, write, execute</div>
+          <div class="topic-line">Owner / group / others (ugo)</div>
+          <div class="topic-line">chmod numeric: 755, 644, 600 explained</div>
+          <div class="topic-line">chmod symbolic: chmod u+x, g-w</div>
+          <div class="topic-line">chown to change ownership</div>
+          <div class="topic-line">umask and default permissions</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">Users &amp; Groups</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">whoami, id, groups</div>
+          <div class="topic-line">sudo — running as root safely</div>
+          <div class="topic-line">su vs sudo — the difference</div>
+          <div class="topic-line">useradd, passwd, userdel</div>
+          <div class="topic-line">groupadd, usermod -aG</div>
+          <div class="topic-line">/etc/passwd and /etc/shadow format</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">Process Management</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">ps aux — snapshot of running processes</div>
+          <div class="topic-line">top and htop — interactive process viewers</div>
+          <div class="topic-line">kill PID and kill -9 (SIGKILL) vs SIGTERM</div>
+          <div class="topic-line">killall, pkill by process name</div>
+          <div class="topic-line">bg, fg, jobs — background processes</div>
+          <div class="topic-line">nohup and &amp; operator for detaching</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">System Info &amp; Resources</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">df -h — disk usage by mount point</div>
+          <div class="topic-line">du -sh * — directory sizes</div>
+          <div class="topic-line">free -h — RAM and swap usage</div>
+          <div class="topic-line">uptime and load averages explained</div>
+          <div class="topic-line">uname -a, hostnamectl, lscpu</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">05</div><div class="skill-label">Package Management</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">apt update && apt upgrade (Debian/Ubuntu)</div>
+          <div class="topic-line">apt install, remove, purge</div>
+          <div class="topic-line">dpkg -l to list installed packages</div>
+          <div class="topic-line">snap, flatpak as alternatives</div>
+          <div class="topic-line">yum/dnf on RHEL/CentOS systems</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">06</div><div class="skill-label">Systemd &amp; Services</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">systemctl start / stop / restart a service</div>
+          <div class="topic-line">systemctl status — check if a service is running</div>
+          <div class="topic-line">systemctl enable/disable on boot</div>
+          <div class="topic-line">journalctl -u servicename for service logs</div>
+          <div class="topic-line">Writing a simple .service unit file</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">Permission Experiment</div>
+          <div class="task-info">Create a file, set it to 000. Try to cat it — see the denial. Change to 644, try again. Create a shell script, give it 755 and run it. Understand each permission digit.</div>
+          <span class="task-cmd">chmod 000 test.txt && cat test.txt</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Find what's eating your CPU</div>
+          <div class="task-info">Run htop. Sort by CPU usage (F6 → CPU%). Identify the top 3 processes. Find the PID of one, and use kill -15 PID on a safe test process. Observe the result.</div>
+          <span class="task-cmd">ps aux --sort=-%cpu | head -10</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">Service control with nginx</div>
+          <div class="task-info">Install nginx with apt. Start it. Check status. Hit localhost:80 in a browser. Stop it. Re-check status. Look at its logs with journalctl -u nginx --since "10 min ago".</div>
+          <span class="task-cmd">sudo systemctl status nginx</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 3: BASH SCRIPTING ═══════════ -->
+  <div class="phase-panel" id="phase-3">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 04 / 06</div>
+        <div class="phase-title">Bash Scripting</div>
+        <div class="phase-desc">This is where Linux turns into a superpower. Automate repetitive tasks, write deployment scripts, and build tools that save hours of manual work.</div>
+      </div>
+      <div class="level-badge level-intermediate">intermediate</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">Script Basics</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">#!/usr/bin/env bash — the shebang line</div>
+          <div class="topic-line">Making scripts executable with chmod +x</div>
+          <div class="topic-line">Running: ./script.sh vs bash script.sh</div>
+          <div class="topic-line">echo, printf — output formatting</div>
+          <div class="topic-line">Comments with #</div>
+          <div class="topic-line">set -e (exit on error), set -x (debug mode)</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">Variables &amp; Input</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Variable assignment: name="anish" (no spaces!)</div>
+          <div class="topic-line">$var vs ${var} — when to use braces</div>
+          <div class="topic-line">read for interactive user input</div>
+          <div class="topic-line">$1, $2, $@ — positional arguments</div>
+          <div class="topic-line">$# (arg count), $0 (script name), $? (exit code)</div>
+          <div class="topic-line">Environment variables: export, $HOME, $PATH</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">Conditionals</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">if / elif / else / fi syntax</div>
+          <div class="topic-line">[ ] vs [[ ]] — prefer double brackets</div>
+          <div class="topic-line">String: -z (empty), -n (non-empty), = and !=</div>
+          <div class="topic-line">Numeric: -eq, -ne, -lt, -gt, -le, -ge</div>
+          <div class="topic-line">File tests: -f (file), -d (dir), -e (exists), -x (exec)</div>
+          <div class="topic-line">Logical: &amp;&amp; and || in conditions</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">Loops</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">for item in list; do ... done</div>
+          <div class="topic-line">for i in {1..10}; do ... done</div>
+          <div class="topic-line">while [ condition ]; do ... done</div>
+          <div class="topic-line">Loop over files: for f in *.sh; do</div>
+          <div class="topic-line">break and continue</div>
+          <div class="topic-line">C-style loop: for ((i=0; i&lt;10; i++))</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">05</div><div class="skill-label">Functions</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Defining: function_name() { ... }</div>
+          <div class="topic-line">Arguments inside functions: $1, $2</div>
+          <div class="topic-line">return vs echo for output</div>
+          <div class="topic-line">local variables to avoid leaks</div>
+          <div class="topic-line">Calling functions before or after definition</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">06</div><div class="skill-label">String &amp; Array Manipulation</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Indexed arrays: arr=("a" "b" "c")</div>
+          <div class="topic-line">${arr[0]}, ${arr[@]}, ${#arr[@]}</div>
+          <div class="topic-line">String length: ${#var}</div>
+          <div class="topic-line">Substring: ${var:0:5}</div>
+          <div class="topic-line">Pattern removal: ${var#prefix}, ${var%suffix}</div>
+          <div class="topic-line">tr for character translation</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">System health check script</div>
+          <div class="task-info">Write a script that prints disk usage, RAM usage, uptime, and logged-in users. Add a warning if disk usage is above 80%. Run it, make it executable, and schedule it as a one-shot test.</div>
+          <span class="task-cmd">#!/usr/bin/env bash · df -h · free -h · uptime</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Bulk file renamer</div>
+          <div class="task-info">Write a script that accepts a directory as $1. It loops over all .txt files in that dir and renames them to .bak. Handle the case where the dir doesn't exist with an error message and exit 1.</div>
+          <span class="task-cmd">for f in "$1"/*.txt; do mv "$f" "${f%.txt}.bak"; done</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">Automated backup script</div>
+          <div class="task-info">Write a script that tarballs a given directory ($1), names the archive with a timestamp, saves it to ~/backups/, and logs each backup to ~/backups/backup.log with the date and size.</div>
+          <span class="task-cmd">tar -czf backup_$(date +%Y%m%d_%H%M%S).tar.gz "$1"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 4: POWER TOOLS ═══════════ -->
+  <div class="phase-panel" id="phase-4">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 05 / 06</div>
+        <div class="phase-title">Power Tools</div>
+        <div class="phase-desc">The tools that turn good Linux users into elite ones. grep, awk, sed, and friends — you'll use these every day as a DevOps engineer analyzing logs and data.</div>
+      </div>
+      <div class="level-badge level-intermediate">intermediate</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">grep — Pattern Matching</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">grep "pattern" file — basic search</div>
+          <div class="topic-line">-i (case insensitive), -r (recursive), -l (filenames only)</div>
+          <div class="topic-line">-n (line numbers), -c (count matches)</div>
+          <div class="topic-line">-v to invert match (show non-matching lines)</div>
+          <div class="topic-line">-E for extended regex (grep -E "error|warn")</div>
+          <div class="topic-line">grep in pipelines: command | grep keyword</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">sed — Stream Editor</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">sed 's/old/new/g' — global substitution</div>
+          <div class="topic-line">-i flag for in-place file editing</div>
+          <div class="topic-line">Deleting lines matching a pattern: sed '/ERROR/d'</div>
+          <div class="topic-line">Print specific lines: sed -n '5,10p'</div>
+          <div class="topic-line">Address ranges and line numbers</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">awk — Data Processing</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">awk '{print $1, $3}' — print specific fields</div>
+          <div class="topic-line">Field separator: awk -F: '{print $1}' /etc/passwd</div>
+          <div class="topic-line">Conditions: awk '$3 > 1000 {print $0}'</div>
+          <div class="topic-line">NR (record num), NF (field count) variables</div>
+          <div class="topic-line">BEGIN and END blocks</div>
+          <div class="topic-line">Summing columns: awk '{sum += $2} END {print sum}'</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">sort, uniq, cut</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">sort alphabetically and numerically (-n)</div>
+          <div class="topic-line">sort -r (reverse), sort -k2 (by column 2)</div>
+          <div class="topic-line">uniq to deduplicate (must sort first!)</div>
+          <div class="topic-line">uniq -c to count occurrences</div>
+          <div class="topic-line">cut -d: -f1 to extract columns from delimited files</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">05</div><div class="skill-label">Networking Commands</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">ping, traceroute, mtr for connectivity</div>
+          <div class="topic-line">curl and wget for HTTP requests</div>
+          <div class="topic-line">netstat -tulpn and ss -tulpn for open ports</div>
+          <div class="topic-line">ip addr, ip route for interfaces</div>
+          <div class="topic-line">nmap for port scanning (lab use)</div>
+          <div class="topic-line">SSH basics: ssh user@host, ssh keys</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">06</div><div class="skill-label">Archiving &amp; Compression</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">tar -czf archive.tar.gz dir/ — create</div>
+          <div class="topic-line">tar -xzf archive.tar.gz — extract</div>
+          <div class="topic-line">tar -tf to list contents without extracting</div>
+          <div class="topic-line">gzip, gunzip, bzip2, xz comparison</div>
+          <div class="topic-line">zip/unzip for cross-platform use</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">07</div><div class="skill-label">Cron &amp; Scheduling</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">crontab -e — editing your cron jobs</div>
+          <div class="topic-line">Cron syntax: minute hour day month weekday</div>
+          <div class="topic-line">@reboot, @daily, @weekly shortcuts</div>
+          <div class="topic-line">Redirect cron output to logs</div>
+          <div class="topic-line">Debugging cron with journalctl</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">Log analysis pipeline</div>
+          <div class="task-info">Using /var/log/syslog (or any log file), build a one-liner pipeline: extract only ERROR lines, count occurrences of each unique error type, sort by frequency, show top 5.</div>
+          <span class="task-cmd">grep -i "error" syslog | awk '{print $5}' | sort | uniq -c | sort -rn | head -5</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Scheduled backup with cron</div>
+          <div class="task-info">Take your backup script from Milestone 4. Schedule it with cron to run every day at 2am. Verify crontab -l shows it. Check journalctl to confirm it ran after one cycle.</div>
+          <span class="task-cmd">crontab -e · 0 2 * * * /home/user/backup.sh</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">SSH keygen &amp; passwordless login</div>
+          <div class="task-info">Generate an SSH key pair with ssh-keygen. Copy the public key to another machine (or a second local user) with ssh-copy-id. Log in without a password. This is how all DevOps tooling connects to servers.</div>
+          <span class="task-cmd">ssh-keygen -t ed25519 && ssh-copy-id user@host</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ PHASE 5: ADVANCED ═══════════ -->
+  <div class="phase-panel" id="phase-5">
+    <div class="phase-header">
+      <div>
+        <div class="phase-meta">milestone 06 / 06</div>
+        <div class="phase-title">Advanced &amp; DevOps-Ready</div>
+        <div class="phase-desc">The skills that bridge Linux knowledge to Docker, GCP, and production engineering. After this, you're ready for the DevOps stack.</div>
+      </div>
+      <div class="level-badge level-advanced">advanced</div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">01</div><div class="skill-label">Shell Config &amp; .bashrc</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">~/.bashrc vs ~/.bash_profile vs ~/.profile</div>
+          <div class="topic-line">Creating custom aliases: alias k="kubectl"</div>
+          <div class="topic-line">Adding to $PATH permanently</div>
+          <div class="topic-line">source ~/.bashrc to reload without restart</div>
+          <div class="topic-line">PS1 customization — prompt engineering</div>
+          <div class="topic-line">Shell functions in .bashrc for shortcuts</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">02</div><div class="skill-label">Advanced Bash Patterns</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Associative arrays (dictionaries) in bash 4+</div>
+          <div class="topic-line">Process substitution: diff &lt;(cmd1) &lt;(cmd2)</div>
+          <div class="topic-line">Brace expansion: {a,b,c} and {1..10}</div>
+          <div class="topic-line">Here-strings and heredocs in scripts</div>
+          <div class="topic-line">Trapping signals: trap 'cleanup' EXIT SIGINT</div>
+          <div class="topic-line">Parallel execution with &amp; and wait</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">03</div><div class="skill-label">Environment &amp; Config Mgmt</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Reading .env files in scripts</div>
+          <div class="topic-line">export vs local vs global variables</div>
+          <div class="topic-line">envsubst for templating config files</div>
+          <div class="topic-line">Storing secrets safely — avoid hardcoding</div>
+          <div class="topic-line">direnv for per-directory environments</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">04</div><div class="skill-label">Disk &amp; Storage</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Partitions, mount points, and /etc/fstab</div>
+          <div class="topic-line">mount and umount commands</div>
+          <div class="topic-line">lsblk, blkid for block devices</div>
+          <div class="topic-line">Inodes — what they are and why they matter</div>
+          <div class="topic-line">LVM basics — logical volume management</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">05</div><div class="skill-label">Networking Deep Dive</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">iptables/nftables basics — firewall rules</div>
+          <div class="topic-line">ufw — simplified firewall management</div>
+          <div class="topic-line">/etc/hosts and DNS resolution order</div>
+          <div class="topic-line">tcpdump for packet inspection</div>
+          <div class="topic-line">curl -v and HTTP headers debugging</div>
+          <div class="topic-line">socat and netcat for raw TCP testing</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">06</div><div class="skill-label">Scripting for DevOps</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">Writing idempotent scripts — safe to re-run</div>
+          <div class="topic-line">Parsing JSON with jq in bash pipelines</div>
+          <div class="topic-line">Using curl + jq to call REST APIs from scripts</div>
+          <div class="topic-line">Linting scripts with shellcheck</div>
+          <div class="topic-line">Makefile basics as a task runner</div>
+          <div class="topic-line">Scripts that interact with Docker CLI</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">07</div><div class="skill-label">tmux &amp; Productivity</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">tmux sessions — persistent terminal multiplexing</div>
+          <div class="topic-line">tmux panes and windows — split your terminal</div>
+          <div class="topic-line">Attaching/detaching: tmux attach -t session</div>
+          <div class="topic-line">Key bindings and .tmux.conf customization</div>
+          <div class="topic-line">Why tmux matters for remote server work</div>
+        </div>
+      </div>
+      <div class="skill-card" onclick="toggleSkill(this)">
+        <div class="skill-header"><div class="skill-num">08</div><div class="skill-label">Security Essentials</div><div class="skill-chevron">+</div></div>
+        <div class="skill-body">
+          <div class="topic-line">sshd_config — disabling root login, port change</div>
+          <div class="topic-line">fail2ban for brute force protection</div>
+          <div class="topic-line">File integrity: sha256sum, md5sum</div>
+          <div class="topic-line">Auditing: last, lastlog, who, w</div>
+          <div class="topic-line">setuid, setgid, sticky bit — special perms</div>
+          <div class="topic-line">Basic SELinux/AppArmor awareness</div>
+        </div>
+      </div>
+    </div>
+    <div class="tasks-section">
+      <div class="tasks-heading">hands-on tasks</div>
+      <div class="task-card">
+        <div class="task-index">1</div>
+        <div class="task-content">
+          <div class="task-name">API caller script with jq</div>
+          <div class="task-info">Write a script that calls a public JSON API (try api.github.com/users/your-username). Parse the response with jq to extract name, public_repos, and followers. Print them in a clean formatted output.</div>
+          <span class="task-cmd">curl -s https://api.github.com/users/USERNAME | jq '.name, .public_repos'</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">2</div>
+        <div class="task-content">
+          <div class="task-name">Build your personal .bashrc toolkit</div>
+          <div class="task-info">Add 5 useful aliases (e.g., alias gs="git status"), a function that makes a directory and immediately cd's into it (mkcd), and a custom PS1 prompt showing the current git branch. Source it and test everything.</div>
+          <span class="task-cmd">mkcd() { mkdir -p "$1" &amp;&amp; cd "$1"; }</span>
+        </div>
+      </div>
+      <div class="task-card">
+        <div class="task-index">3</div>
+        <div class="task-content">
+          <div class="task-name">Capstone: Docker-ready deploy script</div>
+          <div class="task-info">Write a deploy.sh that: reads a .env file, pulls latest code from git, checks if a Docker daemon is running, builds an image, stops the old container if running, and starts the new one. Use set -e. This is a real DevOps task.</div>
+          <span class="task-cmd">./deploy.sh — your first real DevOps script</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER NAV -->
+  <div class="roadmap-footer">
+    <div class="footer-status">milestone <span class="hl" id="footerIdx">1</span> of <span class="hl">6</span> · <span id="footerPhase">Foundation</span></div>
+    <div class="nav-controls">
+      <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← prev</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="navigate(1)">next →</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let current = 0;
+  const PHASES = ['Foundation','File System','Process & Perms','Bash Scripting','Power Tools','Advanced & DevOps'];
+  const TOTAL = 6;
+
+  function switchPhase(idx) {
+    document.querySelectorAll('.phase-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+    document.querySelectorAll('.tab-btn').forEach((t, i) => t.classList.toggle('active', i === idx));
+    current = idx;
+    document.getElementById('progressFill').style.width = (((idx + 1) / TOTAL) * 100) + '%';
+    document.getElementById('footerIdx').textContent = idx + 1;
+    document.getElementById('footerPhase').textContent = PHASES[idx];
+    document.getElementById('prevBtn').disabled = idx === 0;
+    const nxt = document.getElementById('nextBtn');
+    nxt.disabled = idx === TOTAL - 1;
+    nxt.textContent = idx === TOTAL - 1 ? 'done ✓' : 'next →';
+    // scroll tabs into view
+    document.querySelectorAll('.tab-btn')[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < TOTAL) switchPhase(next);
+  }
+
+  function toggleSkill(card) {
+    card.classList.toggle('expanded');
+  }
+
+  switchPhase(0);
+</script>
+</body>
+</html>
